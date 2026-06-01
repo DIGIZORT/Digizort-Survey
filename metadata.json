@@ -1,0 +1,6 @@
+{
+  "name": "DIGIZORT Web Platform",
+  "description": "A futuristic, cyberpunk-inspired presentation experience and interactive poll space for DIGIZORT, featuring custom animation rendering, smooth logo assembly, and a robust admin response system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

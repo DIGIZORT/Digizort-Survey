@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net (default deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Is Valid ID Helper to prevent resource/ID poisoning
+    function isValidId(id) {
+      return id is string && id.size() <= 128;
+    }
+
+    // Check if user is signed in
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Check if user is the verified admin
+    function isAdmin() {
+      return isSignedIn() &&
+        request.auth.token.email == 'admin@digizort.com';
+    }
+
+    // Enforce static types, size bounds, and correct schema keys
+    function isValidOpinion(data) {
+      return data.keys().hasAll(['fullName', 'answer', 'opinion', 'createdAt'])
+        && data.fullName is string
+        && data.fullName.size() >= 2
+        && data.fullName.size() <= 100
+        && data.answer is string
+        && (data.answer == 'Yes' || data.answer == 'No')
+        && data.opinion is string
+        && data.opinion.size() >= 2
+        && data.opinion.size() <= 2000
+        && data.createdAt != null;
+    }
+
+    match /opinions/{opinionId} {
+      allow create: if isValidId(opinionId) && isValidOpinion(request.resource.data);
+      allow read, delete: if true;
+      allow update: if false; // opinions are immutable
+    }
+  }
+}

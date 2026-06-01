@@ -1,0 +1,36 @@
+{
+  "entities": {
+    "Opinion": {
+      "title": "Opinion",
+      "description": "A user's opinion on DIGIZORT's future",
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "description": "Full name of the respondent"
+        },
+        "answer": {
+          "type": "string",
+          "enum": ["Yes", "No"],
+          "description": "Do you believe DIGIZORT will achieve its future vision?"
+        },
+        "opinion": {
+          "type": "string",
+          "description": "Detailed written opinion"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when response was created"
+        }
+      },
+      "required": ["fullName", "answer", "opinion", "createdAt"]
+    }
+  },
+  "firestore": {
+    "opinions": {
+      "schema": "Opinion",
+      "description": "Collection of user-submitted opinion survey responses"
+    }
+  }
+}
